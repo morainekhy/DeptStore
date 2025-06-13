@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Entry</title>
+    <style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        background: #f6f8fa;
+        min-height: 100vh;
+    }
+    .container {
+        max-width: 600px;
+        margin: 48px auto;
+        padding: 0 16px;
+    }
+    .form-box {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        padding: 32px 32px 24px 32px;
+        margin-bottom: 32px;
+        transition: box-shadow 0.2s;
+    }
+    .form-box:hover {
+        box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    }
+    h2 {
+        text-align: center;
+        color: #22223b;
+        margin-bottom: 32px;
+        letter-spacing: 1px;
+    }
+    label {
+        display: block;
+        margin-top: 18px;
+        color: #4a4e69;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    input[type="text"], input[type="number"] {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 12px;
+        margin-top: 6px;
+        border: 1.5px solid #c9c9c9;
+        border-radius: 6px;
+        font-size: 1rem;
+        background: #f8f9fa;
+        transition: border 0.2s;
+    }
+    input[type="text"]:focus, input[type="number"]:focus {
+        border: 1.5px solid #4361ee;
+        outline: none;
+        background: #fff;
+    }
+    .form-box button {
+        margin-top: 24px;
+        width: 40%;
+        padding: 12px 0;
+        background: linear-gradient(90deg, #4361ee 0%, #4895ef 100%);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(67,97,238,0.08);
+        transition: background 0.2s, box-shadow 0.2s;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .form-box button:hover {
+        background: linear-gradient(90deg, #4895ef 0%, #4361ee 100%);
+        box-shadow: 0 4px 16px rgba(67,97,238,0.13);
+    }
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 20px;
+        width: 100%;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    th, td {
+        padding: 14px 12px;
+        text-align: left;
+    }
+    th {
+        background: #f1f3f8;
+        color: #22223b;
+        font-weight: 600;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    td {
+        border-bottom: 1px solid #f0f0f0;
+        color: #4a4e69;
+    }
+    tr:last-child td {
+        border-bottom: none;
+    }
+    .selected {
+        background: #e0f2fe !important;
+    }
+    .remove-btn {
+        margin: 24px 0 0 0;
+        width: 40%;
+        padding: 12px 0;
+        background: #ef233c;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(239,35,60,0.08);
+        transition: background 0.2s, box-shadow 0.2s;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .remove-btn:hover {
+        background: #d90429;
+        box-shadow: 0 4px 16px rgba(239,35,60,0.13);
+    }
+    @media (max-width: 700px) {
+        .container { max-width: 98vw; }
+        .form-box { padding: 18px 8px 16px 8px; }
+        table, th, td { font-size: 0.97rem; }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Order Entry</h2>
+        <div class="form-box">
+            <form id="orderForm" onsubmit="return false;">
+                <label>
+                    Product Code
+                    <input type="text" id="productCode" required>
+                </label>
+                <label>
+                    Product Name
+                    <input type="text" id="productName" required>
+                </label>
+                <label>
+                    Quantity
+                    <input type="number" id="quantity" min="1" required>
+                </label>
+                <label>
+                    Limit Price
+                    <input type="number" id="limitPrice" min="0" step="0.01" required>
+                </label>
+                <button type="button" onclick="addOrder()">Add to Orders</button>
+            </form>
+        </div>
+
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Product Code</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Limit Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button type="button" class="remove-btn" onclick="removeSelectedOrder()">Remove</button>
+    </div>
+    <script>
+        function addOrder() {
+            const code = document.getElementById('productCode').value.trim();
+            const name = document.getElementById('productName').value.trim();
+            const qty = document.getElementById('quantity').value;
+            const price = document.getElementById('limitPrice').value;
+
+            if (!code || !name || !qty || !price) return;
+
+            const tbody = document.getElementById('ordersTable').querySelector('tbody');
+            const row = document.createElement('tr');
+            row.onclick = function() {
+                Array.from(tbody.children).forEach(r => r.classList.remove('selected'));
+                row.classList.add('selected');
+            };
+            row.innerHTML = `
+                <td>${code}</td>
+                <td>${name}</td>
+                <td>${qty}</td>
+                <td>${parseFloat(price).toFixed(2)}</td>
+            `;
+            tbody.appendChild(row);
+
+            document.getElementById('orderForm').reset();
+        }
+
+        function removeSelectedOrder() {
+            const tbody = document.getElementById('ordersTable').querySelector('tbody');
+            const selected = tbody.querySelector('.selected');
+            if (selected) {
+                tbody.removeChild(selected);
+            }
+        }
+    </script>
+</body>
+</html>

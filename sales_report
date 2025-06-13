@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px 24px 24px;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 24px;
+            color: #222;
+            text-align: center;
+        }
+        .search-bar {
+            width: 100%;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+        .search-bar input {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            padding: 10px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #f6f8fa;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+        }
+        th {
+            color: #555;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+        }
+        tr {
+            border-bottom: 1px solid #f1f1f1;
+        }
+        tr:last-child {
+            border-bottom: none;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        button {
+            background: #0078d4;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 22px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        button:hover {
+            background: #005fa3;
+        }
+        tr.selected {
+            background: #e6f2fb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sales Report</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search product..." onkeyup="filterTable()">
+        </div>
+        <table id="salesTable">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Transaction</th>
+                    <th>Product</th>
+                    <th>User</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- to be rendered dynamically -->
+            </tbody>
+        </table>
+        <div class="actions">
+            <button onclick="viewSale()">View</button>
+            <button onclick="updateSale()">Update</button>
+        </div>
+    </div>
+    <script>
+        const sales = [
+            { sales_id: '987001', transaction_id: '111000', product_id: '654009', user_id: 8, price: 250.00, quantity: 4, status: 'active', date: '3/5/2025' },
+            { sales_id: '987002', transaction_id: '111001', product_id: '654007', user_id: 8, price: 580.00, quantity: 3, status: 'active', date: '3/5/2025' },
+            { sales_id: '987003', transaction_id: '111002', product_id: '654008', user_id: 8, price: 2500.00, quantity: 1, status: 'active', date: '3/5/2025' },
+            { sales_id: '987004', transaction_id: '111003', product_id: '654003', user_id: 7, price: 100.00, quantity: 3, status: 'cancelled', date: '3/5/2025' },
+            { sales_id: '987005', transaction_id: '111004', product_id: '654002', user_id: 9, price: 3270.00, quantity: 2, status: 'active', date: '3/5/2025' },
+            { sales_id: '987006', transaction_id: '111005', product_id: '654004', user_id: 9, price: 950.00, quantity: 2, status: 'active', date: '3/5/2025' },
+            { sales_id: '987007', transaction_id: '111006', product_id: '654006', user_id: 7, price: 830.00, quantity: 3, status: 'returned', date: '3/5/2025' },
+            { sales_id: '987008', transaction_id: '111007', product_id: '654001', user_id: 7, price: 420.00, quantity: 1, status: 'active', date: '3/5/2025' },
+            { sales_id: '987009', transaction_id: '111008', product_id: '654005', user_id: 9, price: 1650.00, quantity: 2, status: 'active', date: '3/5/2025' },
+            { sales_id: '987010', transaction_id: '111009', product_id: '654010', user_id: 8, price: 340.00, quantity: 3, status: 'cancelled', date: '3/5/2025' }
+        ];
+
+        let selectedRow = null;
+
+        function renderTable(filter = '') {
+            const tbody = document.querySelector('#salesTable tbody');
+            tbody.innerHTML = '';
+            sales.forEach((s, idx) => {
+                if (
+                    s.sales_id.toLowerCase().includes(filter) ||
+                    s.transaction_id.toLowerCase().includes(filter) ||
+                    s.product_id.toLowerCase().includes(filter) ||
+                    String(s.user_id).includes(filter) ||
+                    s.status.toLowerCase().includes(filter)
+                ) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${s.sales_id}</td>
+                        <td>${s.transaction_id}</td>
+                        <td>${s.product_id}</td>
+                        <td>${s.user_id}</td>
+                        <td>${s.price.toLocaleString(undefined, {minimumFractionDigits:2})}</td>
+                        <td>${s.quantity}</td>
+                        <td>${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</td>
+                        <td>${s.date}</td>
+                    `;
+                    tr.onclick = () => selectRow(tr, idx);
+                    tbody.appendChild(tr);
+                }
+            });
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            renderTable(input);
+            selectedRow = null;
+            clearSelection();
+        }
+
+        function selectRow(row, idx) {
+            clearSelection();
+            row.classList.add('selected');
+            selectedRow = idx;
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('#salesTable tbody tr').forEach(tr => {
+                tr.classList.remove('selected');
+            });
+        }
+
+        function viewSale() {
+            if (selectedRow === null) {
+                alert('Please select a sale to view.');
+                return;
+            }
+            const s = sales[selectedRow];
+            alert(
+                `Sales ID: ${s.sales_id}\nTransaction ID: ${s.transaction_id}\nProduct ID: ${s.product_id}\nUser ID: ${s.user_id}\nPrice: ${s.price.toLocaleString(undefined, {minimumFractionDigits:2})}\nQuantity: ${s.quantity}\nStatus: ${s.status.charAt(0).toUpperCase() + s.status.slice(1)}\nDate: ${s.date}`
+            );
+        }
+
+        function updateSale() {
+            if (selectedRow === null) {
+                alert('Please select a sale to update.');
+                return;
+            }
+            const s = sales[selectedRow];
+            alert(`Update sale: ${s.sales_id} (to be implemented)`);
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>

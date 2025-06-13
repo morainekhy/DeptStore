@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loyalty Credit</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px 24px 24px;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 24px;
+            color: #222;
+            text-align: center;
+        }
+        .search-bar {
+            width: 100%;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+            max-width: 100%;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .search-bar input {
+            width: 70%;
+            margin-top: 0;
+            min-width: 0;
+            box-sizing: border-box;
+            padding: 10px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #f6f8fa;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            display: block;
+        }
+        .search-bar button {
+            width: 30%;
+            padding: 10px 0;
+            background: #0078d4;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        .search-bar button:hover {
+            background: #005fa3;
+        }
+        .member-details {
+            margin: 24px 0;
+            padding: 18px 16px;
+            background: #f6f8fa;
+            border-radius: 8px;
+            display: none;
+        }
+        .member-details label {
+            font-weight: 500;
+            color: #333;
+        }
+        .member-details .field {
+            margin-bottom: 12px;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        button {
+            background: #0078d4;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 22px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        button:hover {
+            background: #005fa3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-top: 32px;
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+        }
+        th {
+            color: #555;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+        }
+        tr {
+            border-bottom: 1px solid #f1f1f1;
+        }
+        tr:last-child {
+            border-bottom: none;
+        }
+        tr.selected {
+            background: #e6f2fb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Loyalty Credit</h1>
+        <div class="search-bar" style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="searchInput" placeholder="Enter Membership ID..." style="margin-top:0; width:70%;" />
+            <button style="width:30%;" onclick="searchMember()">Search</button>
+        </div>
+        <div class="member-details" id="memberDetails">
+            <div class="field">
+                <label>Name:</label>
+                <span id="memberName"></span>
+            </div>
+            <div class="field">
+                <label>Contact Number:</label>
+                <span id="memberContact"></span>
+            </div>
+            <div class="field">
+                <label>Current Points:</label>
+                <span id="memberPoints"></span>
+            </div>
+            <div class="field">
+                <label for="addPoints">Add Points</label>
+                <input type="number" id="addPoints" min="0" value="0">
+            </div>
+            <div class="field">
+                <label for="deductPoints">Deduct Points</label>
+                <input type="number" id="deductPoints" min="0" value="0">
+            </div>
+            <div class="actions">
+                <button onclick="updatePoints()">Update</button>
+                <button onclick="cancelEdit()" style="background:#aaa;">Cancel</button>
+            </div>
+        </div>
+        <table id="membersTable">
+            <thead>
+                <tr>
+                    <th>Membership ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- to be rendered dynamically -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const members = [
+            { id: '231001', firstName: 'Elise', lastName: 'Castillo', contact: '9379386855', address: '27 Magiliw, Pinyahan, Quezon City', email: 'elisecastillo@email.com', points: 0 },
+            { id: '231001', firstName: 'Jonathan', lastName: 'De Villa', contact: '9425240071', address: '2020 España Boulevard, Sampaloc, Manila', email: 'jonathandevilla@email.com', points: 0 },
+            { id: '231003', firstName: 'Marvin', lastName: 'Cuneta', contact: '9433275980', address: '1818 Lacson Avenue, Sampaloc, Manila', email: 'marvincuneta@email.com', points: 0 },
+            { id: '231002', firstName: 'Esnyr', lastName: 'Reyes', contact: '9234776110', address: '4560 Ramon Magsaysay Boulevard, Sta. Mesa, Manila', email: 'esnyrreyes@email.com', points: 0 },
+            { id: '231002', firstName: 'Ivana', lastName: 'Santos', contact: '9011526678', address: '7890 Old Sta. Mesa Street, Sta. Mesa, Manila', email: 'ivanasantos@email.com', points: 0 },
+            { id: '231001', firstName: 'Marites', lastName: 'Nabuntis', contact: '9884567891', address: '1616 Teresa Street, Sta. Mesa, Manila', email: 'maritesnabuntis@email.com', points: 0 },
+            { id: '231001', firstName: 'Sara', lastName: 'Dela Puente', contact: '9743997968', address: '4141 Vicente Cruz Street, Sampaloc, Manila', email: 'saradelapuente@email.com', points: 0 },
+            { id: '231003', firstName: 'Michael', lastName: 'Montemayor', contact: '9246810120', address: '5050 Maria Clara Street, Sampaloc, Manila', email: 'michaelmontemayor@email.com', points: 0 },
+            { id: '231002', firstName: 'Beatrix', lastName: 'Rutas', contact: '9876543210', address: '1230 Pureza Street, Sta. Mesa, Manila', email: 'beatrixrutas@email.com', points: 0 },
+            { id: '231001', firstName: 'Thom', lastName: 'Moreno', contact: '9112233445', address: '9494 Maceda Street, Sampaloc, Manila', email: 'thommoreno@email.com', points: 0 }
+        ];
+
+        function renderTable(filter = '') {
+            const tbody = document.querySelector('#membersTable tbody');
+            tbody.innerHTML = '';
+            members.forEach(m => {
+                if (
+                    m.id.toLowerCase().includes(filter) ||
+                    m.firstName.toLowerCase().includes(filter) ||
+                    m.lastName.toLowerCase().includes(filter) ||
+                    m.email.toLowerCase().includes(filter)
+                ) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${m.id}</td>
+                        <td>${m.firstName}</td>
+                        <td>${m.lastName}</td>
+                        <td>${m.email}</td>
+                        <td>${m.points}</td>
+                    `;
+                    tr.onclick = () => fillMemberDetails(m);
+                    tbody.appendChild(tr);
+                }
+            });
+        }
+
+        function searchMember() {
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            const matches = members.filter(m => m.id.toLowerCase() === input);
+            if (matches.length > 0) {
+                fillMemberDetails(matches[0]);
+                window.selectedMembers = matches;
+            } else {
+                document.getElementById('memberDetails').style.display = 'none';
+                window.selectedMembers = [];
+                alert('Member not found.');
+            }
+        }
+
+        function fillMemberDetails(member) {
+            document.getElementById('memberName').textContent = member.firstName + ' ' + member.lastName;
+            document.getElementById('memberContact').textContent = member.contact || '-';
+            document.getElementById('memberPoints').textContent = member.points;
+            document.getElementById('addPoints').value = 0;
+            document.getElementById('deductPoints').value = 0;
+            document.getElementById('memberDetails').style.display = 'block';
+            window.selectedMember = member;
+        }
+
+        function updatePoints() {
+            const selected = window.selectedMembers;
+            if (!selected || selected.length === 0) return;
+            const add = parseInt(document.getElementById('addPoints').value, 10) || 0;
+            const deduct = parseInt(document.getElementById('deductPoints').value, 10) || 0;
+            selected.forEach(member => {
+                let newPoints = member.points + add - deduct;
+                if (newPoints < 0) newPoints = 0;
+                member.points = newPoints;
+            });
+            document.getElementById('memberPoints').textContent = selected[0].points;
+            renderTable(document.getElementById('searchInput').value.trim().toLowerCase());
+            alert('Points updated.');
+        }
+
+        function cancelEdit() {
+            document.getElementById('memberDetails').style.display = 'none';
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            renderTable(this.value.trim().toLowerCase());
+        });
+
+        renderTable();
+    </script>
+</body>
+</html>

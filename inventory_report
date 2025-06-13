@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px 24px 24px;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 24px;
+            color: #222;
+            text-align: center;
+        }
+        .search-bar {
+            width: 100%;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+        .search-bar input {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            padding: 10px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #f6f8fa;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+        }
+        th {
+            color: #555;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+        }
+        tr {
+            border-bottom: 1px solid #f1f1f1;
+        }
+        tr:last-child {
+            border-bottom: none;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        button {
+            background: #0078d4;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 22px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        button:hover {
+            background: #005fa3;
+        }
+        tr.selected {
+            background: #e6f2fb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory Report</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search product..." onkeyup="filterTable()">
+        </div>
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- to be rendered dynamically -->
+            </tbody>
+        </table>
+        <div class="actions">
+            <button onclick="exportToPDF()">Export to PDF</button>
+            <button onclick="printReport()">Print Report</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        const products = [
+            { code: '654001', name: 'Denim Jacket', stock: 80 },
+            { code: '654002', name: 'Leather Wallet', stock: 50 },
+            { code: '654003', name: 'Running Shoes', stock: 50 },
+            { code: '654004', name: 'Sports Watch', stock: 30 },
+            { code: '654005', name: 'T-shirt', stock: 200 },
+            { code: '654006', name: 'Handbag', stock: 50 },
+            { code: '654007', name: 'Polo Shirt', stock: 100 },
+            { code: '654008', name: 'Skinny Jeans', stock: 75 },
+            { code: '654009', name: 'Dresses', stock: 50 },
+            { code: '654010', name: 'Long Skirt', stock: 50 }
+        ];
+
+        let selectedRow = null;
+
+        function renderTable(filter = '') {
+            const tbody = document.querySelector('#inventoryTable tbody');
+            tbody.innerHTML = '';
+            products.forEach((p, idx) => {
+                if (
+                    p.code.toLowerCase().includes(filter) ||
+                    p.name.toLowerCase().includes(filter)
+                ) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${p.code}</td>
+                        <td>${p.name}</td>
+                        <td>${p.stock}</td>
+                    `;
+                    tr.onclick = () => selectRow(tr, idx);
+                    tbody.appendChild(tr);
+                }
+            });
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            renderTable(input);
+            selectedRow = null;
+            clearSelection();
+        }
+
+        function selectRow(row, idx) {
+            clearSelection();
+            row.classList.add('selected');
+            selectedRow = idx;
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('#inventoryTable tbody tr').forEach(tr => {
+                tr.classList.remove('selected');
+            });
+        }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text('Inventory Report', 14, 16);
+
+            const head = [['Code', 'Name', 'Stock']];
+            const body = [];
+            const filter = document.getElementById('searchInput').value.toLowerCase();
+
+            products.forEach(p => {
+                if (
+                    p.code.toLowerCase().includes(filter) ||
+                    p.name.toLowerCase().includes(filter)
+                ) {
+                    body.push([
+                        p.code,
+                        p.name,
+                        p.stock
+                    ]);
+                }
+            });
+
+            doc.autoTable({
+                head: head,
+                body: body,
+                startY: 24,
+                styles: { fontSize: 11 }
+            });
+
+            doc.save('inventory_report.pdf');
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>
