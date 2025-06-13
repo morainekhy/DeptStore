@@ -125,6 +125,12 @@
         background: #d90429;
         box-shadow: 0 4px 16px rgba(239,35,60,0.13);
     }
+    form, form label, form input, form select, form textarea, form button {
+        color: #000 !important;
+    }
+    form button {
+        color: #fff !important;
+    }
     @media (max-width: 700px) {
         .container { max-width: 98vw; }
         .form-box { padding: 18px 8px 16px 8px; }
@@ -149,10 +155,8 @@
                     Quantity
                     <input type="number" id="quantity" min="1" required>
                 </label>
-                <label>
-                    Limit Price
-                    <input type="number" id="limitPrice" min="0" step="0.01" required>
-                </label>
+                <label for="unitPrice">Unit Price</label>
+                <input type="number" id="unitPrice" name="unitPrice" min="0" step="0.01" required>
                 <button type="button" onclick="addOrder()">Add to Orders</button>
             </form>
         </div>
@@ -163,7 +167,7 @@
                     <th>Product Code</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
-                    <th>Limit Price</th>
+                    <th>Unit Price</th>
                 </tr>
             </thead>
             <tbody>
@@ -176,7 +180,7 @@
             const code = document.getElementById('productCode').value.trim();
             const name = document.getElementById('productName').value.trim();
             const qty = document.getElementById('quantity').value;
-            const price = document.getElementById('limitPrice').value;
+            const price = document.getElementById('unitPrice').value;
 
             if (!code || !name || !qty || !price) return;
 
