@@ -5,86 +5,85 @@
     <title>Inventory Report</title>
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f8f9fa;
-            margin: 0;
-            padding: 40px;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f9f9f9;
         }
         .container {
-            max-width: 600px;
-            margin: 40px auto;
+            max-width: 800px;
+            margin: auto;
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            padding: 32px 24px 24px 24px;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         }
         h1 {
-            font-size: 1.6rem;
+            text-align: center;
+            font-size: 2rem;
             margin-bottom: 24px;
             color: #222;
-            text-align: center;
         }
         .search-bar {
-            width: 100%;
-            margin-bottom: 18px;
-            box-sizing: border-box;
-            max-width: 100%;
+            margin-bottom: 20px;
         }
         .search-bar input {
             width: 100%;
-            min-width: 0;
-            box-sizing: border-box;
-            padding: 10px 14px;
-            border: 1.5px solid #ddd;
-            border-radius: 6px;
+            padding: 10px;
             font-size: 1rem;
-            outline: none;
-            transition: border 0.2s, box-shadow 0.2s;
-            background: #f6f8fa;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-            display: block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #fff;
+            margin-bottom: 20px;
+            background: #fafafa;
         }
         th, td {
-            padding: 10px 8px;
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
             text-align: left;
         }
         th {
-            color: #555;
-            font-weight: 600;
-            border-bottom: 1px solid #eee;
-        }
-        tr {
-            border-bottom: 1px solid #f1f1f1;
-        }
-        tr:last-child {
-            border-bottom: none;
-        }
-        .actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        button {
-            background: #0078d4;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 10px 22px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.18s;
-        }
-        button:hover {
-            background: #005fa3;
+            background: #f0f0f0;
         }
         tr.selected {
             background: #e6f2fb;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 18px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .export { background: #0078d4; color: #fff; }
+        .print { background: #2196f3; color: #fff; }
+        @media (max-width: 950px) {
+            .container {
+                max-width: 100vw;
+                padding: 16px 4px 16px 4px;
+            }
+            table {
+                font-size: 0.95rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 4px 0;
+            }
+            table {
+                font-size: 0.92rem;
+            }
+            th, td {
+                padding: 7px 4px;
+            }
         }
     </style>
 </head>
@@ -100,15 +99,16 @@
                     <th>Code</th>
                     <th>Name</th>
                     <th>Stock</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- to be rendered dynamically -->
             </tbody>
         </table>
-        <div class="actions">
-            <button onclick="exportToPDF()">Export to PDF</button>
-            <button onclick="printReport()">Print Report</button>
+        <div class="button-group">
+            <button class="export" onclick="exportToPDF()">Export to PDF</button>
+            <button class="print" onclick="printReport()">Print Report</button>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -127,76 +127,59 @@
             { code: '654010', name: 'Long Skirt', stock: 50 }
         ];
 
-        let selectedRow = null;
+        let filteredProducts = [...products];
 
-        function renderTable(filter = '') {
+        function getStatus(stock) {
+            if (stock < 50) return 'Low';
+            if (stock < 100) return 'Medium';
+            return 'High';
+        }
+
+        function renderTable(data) {
             const tbody = document.querySelector('#inventoryTable tbody');
             tbody.innerHTML = '';
-            products.forEach((p, idx) => {
-                if (
-                    p.code.toLowerCase().includes(filter) ||
-                    p.name.toLowerCase().includes(filter)
-                ) {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${p.code}</td>
-                        <td>${p.name}</td>
-                        <td>${p.stock}</td>
-                    `;
-                    tr.onclick = () => selectRow(tr, idx);
-                    tbody.appendChild(tr);
-                }
+            data.forEach(prod => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${prod.code}</td>
+                    <td>${prod.name}</td>
+                    <td>${prod.stock}</td>
+                    <td>${getStatus(prod.stock)}</td>
+                `;
+                tbody.appendChild(row);
             });
         }
 
-        function filterTable() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            renderTable(input);
-            selectedRow = null;
-            clearSelection();
-        }
-
-        function selectRow(row, idx) {
-            clearSelection();
-            row.classList.add('selected');
-            selectedRow = idx;
-        }
-
-        function clearSelection() {
-            document.querySelectorAll('#inventoryTable tbody tr').forEach(tr => {
-                tr.classList.remove('selected');
-            });
-        }
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            filteredProducts = products.filter(p =>
+                p.code.toLowerCase().includes(query) ||
+                p.name.toLowerCase().includes(query)
+            );
+            renderTable(filteredProducts);
+        });
 
         function exportToPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            doc.setFontSize(16);
-            doc.text('Inventory Report', 14, 16);
+            // Table headers
+            const headers = [['Code', 'Name', 'Stock', 'Status']];
 
-            const head = [['Code', 'Name', 'Stock']];
-            const body = [];
-            const filter = document.getElementById('searchInput').value.toLowerCase();
+            // Table body
+            const data = filteredProducts.map(p => [
+                p.code,
+                p.name,
+                p.stock,
+                getStatus(p.stock)
+            ]);
 
-            products.forEach(p => {
-                if (
-                    p.code.toLowerCase().includes(filter) ||
-                    p.name.toLowerCase().includes(filter)
-                ) {
-                    body.push([
-                        p.code,
-                        p.name,
-                        p.stock
-                    ]);
-                }
-            });
-
+            doc.text('Inventory Report', 14, 14);
             doc.autoTable({
-                head: head,
-                body: body,
-                startY: 24,
-                styles: { fontSize: 11 }
+                head: headers,
+                body: data,
+                startY: 20,
+                styles: { fontSize: 10 }
             });
 
             doc.save('inventory_report.pdf');
@@ -206,7 +189,16 @@
             window.print();
         }
 
-        renderTable();
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            filteredProducts = products.filter(p =>
+                p.code.toLowerCase().includes(query) ||
+                p.name.toLowerCase().includes(query)
+            );
+            renderTable(filteredProducts);
+        }
+
+        renderTable(filteredProducts);
     </script>
 </body>
 </html>
