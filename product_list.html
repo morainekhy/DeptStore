@@ -83,6 +83,8 @@
             <button class="back" onclick="goBack()">Back</button>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script>
         const products = [
             { code: '654001', name: 'Denim Jacket', price: 110.00, stock: 80 },
@@ -124,17 +126,29 @@
         });
 
         function exportList() {
-            let csv = 'Product Code,Product Name,Unit Price,Stock\n';
-            filteredProducts.forEach(p => {
-                csv += `${p.code},${p.name},${p.price},${p.stock}\n`;
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Table headers
+            const headers = [['Product Code', 'Product Name', 'Unit Price', 'Stock']];
+
+            // Table body
+            const data = filteredProducts.map(p => [
+                p.code,
+                p.name,
+                p.price.toFixed(2),
+                p.stock
+            ]);
+
+            doc.text('Product List', 14, 14);
+            doc.autoTable({
+                head: headers,
+                body: data,
+                startY: 20,
+                styles: { fontSize: 10 }
             });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'product_list.csv';
-            a.click();
-            URL.revokeObjectURL(url);
+
+            doc.save('product_list.pdf');
         }
 
         function refreshList() {
