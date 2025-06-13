@@ -60,13 +60,8 @@
         <h2>Item Cancellation</h2>
         <form>
             <div class="form-group">
-                <label for="item">Select Item</label>
-                <select id="item" name="item" required>
-                    <option value="">-- Select an item --</option>
-                    <option value="item1">Item 1</option>
-                    <option value="item2">Item 2</option>
-                    <option value="item3">Item 3</option>
-                </select>
+                <label for="productCode">Product Code</label>
+                <input type="text" id="productCode" name="productCode" required>
             </div>
             <div class="form-group">
                 <label for="admin-username">Admin Username</label>
