@@ -51,12 +51,44 @@
         button:hover {
             background: #0056b3;
         }
+        /* Print styles */
+        @media print {
+            body, html {
+                background: #fff !important;
+            }
+            .container, form {
+                box-shadow: none !important;
+                background: #fff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #filterForm, .button-group, .container > h2 {
+                display: none !important;
+            }
+            #printTable {
+                display: table !important;
+            }
+        }
+        #printTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 32px;
+            display: none;
+        }
+        #printTable th, #printTable td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        #printTable th {
+            background: #f0f0f0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Generated Report</h2>
-        <form onsubmit="window.print(); return false;">
+        <form id="filterForm">
             <label for="day">Day</label>
             <input type="number" id="day" name="day" min="1" max="31" required>
 
@@ -70,6 +102,82 @@
                 <button type="submit">Print</button>
             </div>
         </form>
+        <table id="printTable">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Product</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Change</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be inserted here -->
+            </tbody>
+        </table>
     </div>
+    <script>
+        // Sample inventory data (same structure as inventory_report.html)
+        const inventory = [
+            { inventory_id: '445000', product_id: '654001', user_id: 2, action: 'add', inventory_change: 50, inventory_date: '3/5/2025' },
+            { inventory_id: '445001', product_id: '654002', user_id: 3, action: 'add', inventory_change: 50, inventory_date: '3/5/2025' },
+            { inventory_id: '445002', product_id: '654003', user_id: 3, action: 'add', inventory_change: 50, inventory_date: '3/5/2025' },
+            { inventory_id: '445003', product_id: '654004', user_id: 2, action: 'add', inventory_change: 30, inventory_date: '3/5/2025' },
+            { inventory_id: '445004', product_id: '654005', user_id: 3, action: 'add', inventory_change: 25, inventory_date: '3/5/2025' },
+            { inventory_id: '445005', product_id: '654006', user_id: 3, action: 'remove', inventory_change: 10, inventory_date: '3/6/2025' },
+            { inventory_id: '445006', product_id: '654007', user_id: 2, action: 'add', inventory_change: 30, inventory_date: '3/6/2025' },
+            { inventory_id: '445007', product_id: '654008', user_id: 2, action: 'adjust', inventory_change: 5, inventory_date: '3/6/2025' },
+            { inventory_id: '445008', product_id: '654009', user_id: 2, action: 'adjust', inventory_change: 10, inventory_date: '3/6/2025' },
+            { inventory_id: '445009', product_id: '654010', user_id: 3, action: 'adjust', inventory_change: 10, inventory_date: '3/6/2025' }
+        ];
+
+        document.getElementById('filterForm').onsubmit = function(e) {
+            e.preventDefault();
+
+            // Get selected date
+            const day = document.getElementById('day').value.padStart(1, '0');
+            const month = document.getElementById('month').value.padStart(1, '0');
+            const year = document.getElementById('year').value;
+
+            // Format date as M/D/YYYY (to match inventory_date)
+            const dateStr = `${parseInt(month)}/${parseInt(day)}/${year}`;
+
+            // Filter inventory by date
+            const filtered = inventory.filter(i => i.inventory_date === dateStr);
+
+            // Render table
+            const tbody = document.querySelector('#printTable tbody');
+            tbody.innerHTML = '';
+            filtered.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.inventory_id}</td>
+                    <td>${item.product_id}</td>
+                    <td>${item.user_id}</td>
+                    <td>${item.action}</td>
+                    <td>${item.inventory_change}</td>
+                    <td>${item.inventory_date}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Show table for printing
+            document.getElementById('printTable').style.display = 'table';
+
+            // Print only if there are records
+            if (filtered.length > 0) {
+                window.print();
+            } else {
+                alert('No records found for the selected date.');
+            }
+
+            // Hide table after print (for screen)
+            setTimeout(() => {
+                document.getElementById('printTable').style.display = 'none';
+            }, 500);
+        };
+    </script>
 </body>
 </html>

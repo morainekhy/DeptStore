@@ -54,9 +54,8 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .export { background: #ef233c; color: #fff; }
-        .refresh { background: #2196f3; color: #fff; }
-        .back { background: #757575; color: #fff; }
+        .export { background: #007bff; color: #fff; }
+        .print { background: #ef233c; color: #fff; }
     </style>
 </head>
 <body>
@@ -78,9 +77,8 @@
             </tbody>
         </table>
         <div class="button-group">
-            <button class="export" onclick="exportList()">Export List</button>
-            <button class="refresh" onclick="refreshList()">Refresh</button>
-            <button class="back" onclick="goBack()">Back</button>
+            <button class="export" onclick="exportList()">View List</button>
+            <button class="print" onclick="printList()">Print List</button>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -129,10 +127,8 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Table headers
             const headers = [['Product Code', 'Product Name', 'Unit Price', 'Stock']];
 
-            // Table body
             const data = filteredProducts.map(p => [
                 p.code,
                 p.name,
@@ -149,6 +145,10 @@
             });
 
             doc.save('product_list.pdf');
+        }
+
+        function printList() {
+            window.print();
         }
 
         function refreshList() {

@@ -21,7 +21,6 @@
             text-align: center;
             font-size: 2rem;
             margin-bottom: 24px;
-            color: #222;
         }
         .search-bar {
             margin-bottom: 20px;
@@ -63,8 +62,8 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .export { background: #0078d4; color: #fff; }
-        .print { background: #2196f3; color: #fff; }
+        .export { background: #007bff; color: #fff; }
+        .print { background: #ef233c; color: #fff; }
         @media (max-width: 950px) {
             .container {
                 max-width: 100vw;
@@ -97,9 +96,11 @@
             <thead>
                 <tr>
                     <th>Code</th>
-                    <th>Name</th>
-                    <th>Stock</th>
-                    <th>Status</th>
+                    <th>Product</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Change</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -114,37 +115,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script>
-        const products = [
-            { code: '654001', name: 'Denim Jacket', stock: 80 },
-            { code: '654002', name: 'Leather Wallet', stock: 50 },
-            { code: '654003', name: 'Running Shoes', stock: 50 },
-            { code: '654004', name: 'Sports Watch', stock: 30 },
-            { code: '654005', name: 'T-shirt', stock: 200 },
-            { code: '654006', name: 'Handbag', stock: 50 },
-            { code: '654007', name: 'Polo Shirt', stock: 100 },
-            { code: '654008', name: 'Skinny Jeans', stock: 75 },
-            { code: '654009', name: 'Dresses', stock: 50 },
-            { code: '654010', name: 'Long Skirt', stock: 50 }
+        const inventory = [
+            { inventory_id: '445000', product_id: '654001', user_id: 2, action: 'add', inventory_change: 50, inventory_date: '3/5/2025' },
+            { inventory_id: '445001', product_id: '654002', user_id: 3, action: 'add', inventory_change: 50, inventory_date: '3/5/2025' },
+            { inventory_id: '445002', product_id: '654003', user_id: 3, action: 'add', inventory_change: 50, inventory_date: '3/5/2025' },
+            { inventory_id: '445003', product_id: '654004', user_id: 2, action: 'add', inventory_change: 30, inventory_date: '3/5/2025' },
+            { inventory_id: '445004', product_id: '654005', user_id: 3, action: 'add', inventory_change: 25, inventory_date: '3/5/2025' },
+            { inventory_id: '445005', product_id: '654006', user_id: 3, action: 'remove', inventory_change: 10, inventory_date: '3/6/2025' },
+            { inventory_id: '445006', product_id: '654007', user_id: 2, action: 'add', inventory_change: 30, inventory_date: '3/6/2025' },
+            { inventory_id: '445007', product_id: '654008', user_id: 2, action: 'adjust', inventory_change: 5, inventory_date: '3/6/2025' },
+            { inventory_id: '445008', product_id: '654009', user_id: 2, action: 'adjust', inventory_change: 10, inventory_date: '3/6/2025' },
+            { inventory_id: '445009', product_id: '654010', user_id: 3, action: 'adjust', inventory_change: 10, inventory_date: '3/6/2025' }
         ];
 
-        let filteredProducts = [...products];
-
-        function getStatus(stock) {
-            if (stock < 50) return 'Low';
-            if (stock < 100) return 'Medium';
-            return 'High';
-        }
+        let filteredInventory = [...inventory];
 
         function renderTable(data) {
             const tbody = document.querySelector('#inventoryTable tbody');
             tbody.innerHTML = '';
-            data.forEach(prod => {
+            data.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${prod.code}</td>
-                    <td>${prod.name}</td>
-                    <td>${prod.stock}</td>
-                    <td>${getStatus(prod.stock)}</td>
+                    <td>${item.inventory_id}</td>
+                    <td>${item.product_id}</td>
+                    <td>${item.user_id}</td>
+                    <td>${item.action}</td>
+                    <td>${item.inventory_change}</td>
+                    <td>${item.inventory_date}</td>
                 `;
                 tbody.appendChild(row);
             });
@@ -152,11 +149,15 @@
 
         document.getElementById('searchInput').addEventListener('input', function() {
             const query = this.value.toLowerCase();
-            filteredProducts = products.filter(p =>
-                p.code.toLowerCase().includes(query) ||
-                p.name.toLowerCase().includes(query)
+            filteredInventory = inventory.filter(i =>
+                i.inventory_id.toLowerCase().includes(query) ||
+                i.product_id.toLowerCase().includes(query) ||
+                String(i.user_id).includes(query) ||
+                i.action.toLowerCase().includes(query) ||
+                String(i.inventory_change).includes(query) ||
+                i.inventory_date.toLowerCase().includes(query)
             );
-            renderTable(filteredProducts);
+            renderTable(filteredInventory);
         });
 
         function exportToPDF() {
@@ -164,14 +165,16 @@
             const doc = new jsPDF();
 
             // Table headers
-            const headers = [['Code', 'Name', 'Stock', 'Status']];
+            const headers = [['Code', 'Product', 'User', 'Action', 'Change', 'Date']];
 
             // Table body
-            const data = filteredProducts.map(p => [
-                p.code,
-                p.name,
-                p.stock,
-                getStatus(p.stock)
+            const data = filteredInventory.map(i => [
+                i.inventory_id,
+                i.product_id,
+                i.user_id,
+                i.action,
+                i.inventory_change,
+                i.inventory_date
             ]);
 
             doc.text('Inventory Report', 14, 14);
@@ -191,14 +194,18 @@
 
         function filterTable() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            filteredProducts = products.filter(p =>
-                p.code.toLowerCase().includes(query) ||
-                p.name.toLowerCase().includes(query)
+            filteredInventory = inventory.filter(i =>
+                i.inventory_id.toLowerCase().includes(query) ||
+                i.product_id.toLowerCase().includes(query) ||
+                String(i.user_id).includes(query) ||
+                i.action.toLowerCase().includes(query) ||
+                String(i.inventory_change).includes(query) ||
+                i.inventory_date.toLowerCase().includes(query)
             );
-            renderTable(filteredProducts);
+            renderTable(filteredInventory);
         }
 
-        renderTable(filteredProducts);
+        renderTable(filteredInventory);
     </script>
 </body>
 </html>
