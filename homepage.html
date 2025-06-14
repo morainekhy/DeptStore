@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Two-6 Department Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --primary-blue-dark: #003366;
+            --accent-red: #b71c2b;
+            --accent-red-dark: #7a1020;
+            --bg-light: #fff;
+            --bg-dark: #f4f8ff;
+            --text-main: #1a2233;
+            --text-light: #fff;
+            --nav-bg: #fff;
+            --nav-hover: #0056b3;
+            --nav-hover-text: #fff;
+            --btn-red: #b71c2b;
+            --btn-blue: #0056b3;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-light);
+            background-image: url('images/simpbg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-main);
+        }
+        header {
+            width: 100vw;
+            background: var(--nav-bg);
+            box-shadow: 0 2px 8px rgba(34,34,59,0.13);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            min-height: 70px;
+        }
+        .header-inner {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2em 2.5em;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-blue);
+            letter-spacing: 2px;
+            white-space: nowrap;
+            text-shadow: 0 2px 8px rgba(0,86,179,0.10);
+        }
+        nav {
+            display: flex;
+            gap: 1.2em;
+            flex-wrap: wrap;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 500;
+            font-size: 1.05em;
+            transition: color 0.2s, background 0.2s;
+            padding: 0.3em 0.9em;
+            border-radius: 0.7em;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        nav a:hover {
+            color: var(--nav-hover-text);
+            background: var(--accent-red);
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 7em;
+        }
+        .main-title {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 12px rgba(0,86,179,0.10);
+        }
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-red);
+            margin-bottom: 2.5rem;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(183,28,43,0.10);
+            font-weight: bold;
+        }
+        .get-started-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-light);
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-red));
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,86,179,0.10);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .get-started-btn:hover {
+            background: linear-gradient(90deg, var(--accent-red), var(--primary-blue-dark));
+            transform: translateY(-2px) scale(1.03);
+        }
+        @media (max-width: 950px) {
+            .header-inner {
+                padding: 1em 1.2em;
+            }
+            nav {
+                gap: 0.7em;
+            }
+            .main-title {
+                font-size: 2.7rem;
+            }
+        }
+        @media (max-width: 700px) {
+            header {
+                min-height: unset;
+            }
+            .header-inner {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0.7em 0.5em;
+            }
+            .logo {
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+            nav {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5em;
+            }
+            .main-content {
+                margin-top: 6em;
+            }
+            .main-title {
+                font-size: 2.2rem;
+            }
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+        @media (max-width: 500px) {
+            .main-title {
+                font-size: 1.5rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+            .main-content {
+                margin-top: 5em;
+            }
+            .header-inner {
+                padding: 0.5em 0.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <span class="logo">Two-6</span>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Account</a>
+                <a href="#">About</a>
+                <a href="#">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    <div class="main-content">
+        <div class="main-title">Two-6</div>
+        <div class="subtitle">Department Store</div>
+        <button class="get-started-btn">Get Started</button>
+    </div>
+</body>
+</html>

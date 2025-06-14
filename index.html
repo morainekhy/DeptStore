@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Two-6 Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --primary-blue-dark: #003366;
+            --accent-red: #b71c2b;
+            --accent-red-dark: #7a1020;
+            --bg-light: #fff;
+            --bg-dark: #f4f8ff;
+            --text-main: #1a2233;
+            --text-light: #fff;
+            --nav-bg: #fff;
+            --nav-hover: #0056b3;
+            --nav-hover-text: #fff;
+            --btn-red: #b71c2b;
+            --btn-blue: #0056b3;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--bg-light);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-main);
+        }
+        header {
+            width: 100vw;
+            background: var(--nav-bg);
+            box-shadow: 0 2px 8px rgba(34,34,59,0.13);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            min-height: 70px;
+        }
+        .header-inner {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2em 2.5em;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-blue);
+            letter-spacing: 2px;
+            white-space: nowrap;
+            text-shadow: 0 2px 8px rgba(0,86,179,0.10);
+        }
+        nav {
+            display: flex;
+            gap: 1.2em;
+            flex-wrap: wrap;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 500;
+            font-size: 1.05em;
+            transition: color 0.2s, background 0.2s;
+            padding: 0.3em 0.9em;
+            border-radius: 0.7em;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        nav a:hover {
+            color: var(--nav-hover-text);
+            background: var(--accent-red);
+        }
+        .dashboard-content {
+            max-width: 1200px;
+            margin: 8em auto 2em auto;
+            padding: 0 2em;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2em;
+            justify-content: space-between;
+            background: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .dashboard-section {
+            flex: 1 1 320px;
+            min-width: 300px;
+            background: none;
+            border-radius: 0;
+            padding: 0 1.2em 1.5em 1.2em;
+            box-shadow: none;
+            margin-bottom: 1em;
+        }
+        .dashboard-section h3 {
+            margin-top: 0;
+            color: var(--primary-blue);
+            font-size: 1.2em;
+            margin-bottom: 1em;
+            font-weight: bold;
+        }
+        .chart-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #e3e8ef 60%, #b3c6e0 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7a1020;
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 1em;
+        }
+        .suggested-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .suggested-links li {
+            margin-bottom: 0.7em;
+        }
+        .suggested-links a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .suggested-links a:hover {
+            color: var(--accent-red);
+        }
+        @media (max-width: 950px) {
+            .header-inner {
+                padding: 1em 1.2em;
+            }
+            nav {
+                gap: 0.7em;
+            }
+            .dashboard-content {
+                flex-direction: column;
+                padding: 0 1em;
+            }
+        }
+        @media (max-width: 700px) {
+            header {
+                min-height: unset;
+            }
+            .header-inner {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0.7em 0.5em;
+            }
+            .logo {
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+            nav {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5em;
+            }
+            .dashboard-content {
+                margin-top: 7em;
+                padding: 0 0.5em;
+            }
+        }
+        @media (max-width: 500px) {
+            .dashboard-content {
+                margin-top: 6em;
+                padding: 0 0.2em;
+            }
+            .header-inner {
+                padding: 0.5em 0.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <span class="logo">Two-6</span>
+            <nav>
+                <a href="#">Products</a>
+                <a href="#">Sales</a>
+                <a href="#">Inventory</a>
+                <a href="#">Members</a>
+                <a href="#">Account</a>
+            </nav>
+        </div>
+    </header>
+    <div class="dashboard-content">
+        <section class="dashboard-section">
+            <h3>Top Grossing Products</h3>
+            <div class="chart-placeholder">
+                [Top Grossing Products Chart Placeholder]
+            </div>
+            <ul class="suggested-links">
+                <li><a href="#">View Product Rankings</a></li>
+                <li><a href="#">Manage Products</a></li>
+            </ul>
+        </section>
+        <section class="dashboard-section">
+            <h3>Sales Overview</h3>
+            <div class="chart-placeholder">
+                [Sales Chart Placeholder]
+            </div>
+            <ul class="suggested-links">
+                <li><a href="#">View Detailed Sales Report</a></li>
+                <li><a href="#">Export Sales Data</a></li>
+            </ul>
+        </section>
+        <section class="dashboard-section">
+            <h3>Inventory Status</h3>
+            <div class="chart-placeholder">
+                [Inventory Chart Placeholder]
+            </div>
+            <ul class="suggested-links">
+                <li><a href="#">Check Low Stock Items</a></li>
+                <li><a href="#">Add New Inventory</a></li>
+            </ul>
+        </section>
+        <section class="dashboard-section">
+            <h3>Announcements</h3>
+            <div style="background: #f8fafd; border-left: 4px solid var(--accent-red); border-radius: 8px; padding: 1em 1.2em; margin-bottom: 0.5em;">
+                <strong style="color: var(--accent-red);">[July 10, 2025]</strong>
+                <span style="color: #222; margin-left: 0.5em;">System maintenance scheduled. Expect downtime from 1:00 AM to 3:00 AM.</span>
+            </div>
+            <div style="background: #f8fafd; border-left: 4px solid var(--primary-blue); border-radius: 8px; padding: 1em 1.2em; margin-bottom: 0.5em;">
+                <strong style="color: var(--primary-blue);">[This Week]</strong>
+                <span style="color: #222; margin-left: 0.5em;">New product arrivals! Check out the latest additions in our Products section.</span>
+            </div>
+            <div style="background: #f8fafd; border-left: 4px solid var(--accent-red); border-radius: 8px; padding: 1em 1.2em;">
+                <strong style="color: var(--accent-red);">[Next Monday]</strong>
+                <span style="color: #222; margin-left: 0.5em;">Holiday sale starts! We have exclusive discounts on selected items.</span>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
