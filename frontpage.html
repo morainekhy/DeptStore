@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DeptStore Frontpage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-dark: #003366;
+            --accent: #b71c2b;
+            --accent-dark: #7a1020;
+            --bg: #fff;
+            --card-bg: #f4f8ff;
+            --text: #1a2233;
+            --muted: #64748b;
+            --radius: 18px;
+            --shadow: 0 6px 32px rgba(0,86,179,0.10);
+        }
+        body {
+            background: var(--bg);
+            background-image: url('images/coolbg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+        }
+        .container {
+            max-width: 900px;
+            margin: 48px auto;
+            display: flex;
+            gap: 40px;
+            flex-wrap: nowrap;
+            justify-content: center;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px 32px;
+            flex: 1 1 340px;
+            min-width: 320px;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        .card:hover {
+            box-shadow: 0 12px 40px rgba(0,86,179,0.13);
+            border-color: #b3c6e0;
+        }
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            width: 100%;
+            text-align: center;
+        }
+        .card p {
+            color: var(--muted);
+            font-size: 1.08rem;
+            margin-bottom: 0;
+            line-height: 1.6;
+            width: 100%;
+            text-align: justify;
+        }
+        .auth-buttons {
+            margin-top: 32px;
+            display: flex;
+            gap: 20px;
+            width: 100%;
+        }
+        .auth-buttons a {
+            flex: 1 1 0;
+            text-align: center;
+            text-decoration: none;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: #fff;
+            padding: 14px 0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 8px rgba(0,86,179,0.08);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+            border: none;
+            outline: none;
+        }
+        .auth-buttons a.signup {
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+        .auth-buttons a:hover, .auth-buttons a:focus {
+            background: linear-gradient(90deg, var(--accent), var(--primary-dark));
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(0,86,179,0.13);
+        }
+        .auth-buttons a.signup:hover, .auth-buttons a.signup:focus {
+            background: linear-gradient(90deg, var(--primary), var(--accent-dark));
+        }
+        .card .member-info {
+            color: var(--muted);
+            font-size: 1.08rem;
+            margin-bottom: 0.7em;
+            line-height: 1.6;
+            width: 100%;
+            text-align: center;
+        }
+        .card ul.features {
+            margin: 0 0 1.2em 0;
+            padding: 0 0 0 1.2em;
+            color: var(--primary);
+            font-size: 1.02rem;
+            text-align: left;
+        }
+        @media (max-width: 950px) {
+            .container {
+                gap: 20px;
+                max-width: 98vw;
+            }
+            .card {
+                padding: 32px 16px;
+            }
+        }
+        @media (max-width: 700px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                gap: 28px;
+            }
+            .card {
+                width: 100%;
+                max-width: 98vw;
+            }
+            .auth-buttons {
+                flex-direction: column;
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Greetings</h2>
+            <p>
+                Welcome, team! As you step onto the floor today, remember that you are the heart of
+                Two-6 Department Store. Your passion for service and commitment to our customers are what set us apart.
+                Let's work together to ensure every customer feels valued and leaves with a smile.
+                Thank you for your hard work and dedication!
+            </p>
+        </div>
+        <div class="card">
+            <h2>User Access</h2>
+            <div class="member-info">
+                Access your personalized dashboard and enjoy exclusive features:
+            </div>
+            <ul class="features">
+                <li>Personalized offers and promotions</li>
+                <li>Wishlist management</li>
+                <li>Faster and easier checkout</li>
+                <li>Order tracking and history</li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html">Login</a>
+                <a href="registration.html" class="signup">Register</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

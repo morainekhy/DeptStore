@@ -29,7 +29,7 @@
             justify-content: center;
             align-items: center;
             background: var(--bg-light);
-            background-image: url('images/simpbg.png');
+            background-image: url('images/glassbg.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
@@ -96,15 +96,20 @@
             margin-top: 7em;
         }
         .main-title {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: bold;
             color: var(--primary-blue);
             margin-bottom: 0.5rem;
             letter-spacing: 2px;
-            text-shadow: 0 2px 12px rgba(0,86,179,0.10);
+            text-shadow:
+                2px 2px 0 #fff,
+                4px 4px 0 #003366,
+                6px 6px 12px #222,
+                0 2px 12px rgba(0,86,179,0.18),
+                0 0 16px #fff;
         }
         .subtitle {
-            font-size: 1.5rem;
+            font-size: 2.5rem; 
             color: var(--accent-red);
             margin-bottom: 2.5rem;
             letter-spacing: 1px;
@@ -198,7 +203,7 @@
     <div class="main-content">
         <div class="main-title">Two-6</div>
         <div class="subtitle">Department Store</div>
-        <button class="get-started-btn">Get Started</button>
+        <button class="get-started-btn" onclick="window.location.href='frontpage.html'">Get Started</button>
     </div>
 </body>
 </html>
