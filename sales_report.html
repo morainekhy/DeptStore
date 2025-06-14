@@ -187,17 +187,14 @@
         }
 
         function viewSale() {
-            // Export the table to PDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Get table headers
             const headers = [];
             document.querySelectorAll('#salesTable thead th').forEach(th => {
                 headers.push(th.innerText);
             });
 
-            // Get table rows
             const data = [];
             document.querySelectorAll('#salesTable tbody tr').forEach(tr => {
                 const row = [];

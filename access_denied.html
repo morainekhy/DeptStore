@@ -14,7 +14,7 @@
         }
         #show-modal {
             padding: 12px 28px;
-            background: #007bff; /* Changed to blue */
+            background: #007bff;
             color: #fff;
             border: none;
             border-radius: 6px;
@@ -84,7 +84,6 @@
 
     <div id="modal">
         <div id="modal-content">
-            <!-- Lock SVG Icon -->
             <svg class="lock-icon" viewBox="0 0 64 64" fill="none">
                 <rect x="14" y="28" width="36" height="26" rx="6" fill="#ef233c"/>
                 <rect x="14" y="28" width="36" height="26" rx="6" stroke="#d90429" stroke-width="2"/>
@@ -104,11 +103,9 @@
         document.getElementById('close-btn').onclick = function() {
             document.getElementById('modal').style.display = 'none';
         };
-        // Optional: close modal on outside click
         document.getElementById('modal').onclick = function(e) {
             if (e.target === this) this.style.display = 'none';
         };
-        // Optional: close modal with Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 document.getElementById('modal').style.display = 'none';

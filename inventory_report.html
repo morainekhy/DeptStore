@@ -164,10 +164,8 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Table headers
             const headers = [['Code', 'Product', 'User', 'Action', 'Change', 'Date']];
 
-            // Table body
             const data = filteredInventory.map(i => [
                 i.inventory_id,
                 i.product_id,
