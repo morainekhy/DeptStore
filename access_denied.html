@@ -2,10 +2,20 @@
 <html>
 <head>
     <title>Access Denied</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        :root {
+            --primary: #007bff;
+            --primary-dark: #0056b3;
+            --accent: #ef233c;
+            --accent-dark: #d90429;
+            --bg: #f4f6fb;
+            --modal-bg: #fff;
+            --shadow: 0 8px 32px rgba(0,0,0,0.18);
+        }
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f4f6fb;
+            background: var(--bg);
             margin: 0;
             height: 100vh;
             display: flex;
@@ -13,19 +23,21 @@
             justify-content: center;
         }
         #show-modal {
-            padding: 12px 28px;
-            background: #007bff;
+            padding: 14px 36px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             color: #fff;
             border: none;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: 500;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,123,255,0.08);
-            transition: background 0.2s;
+            box-shadow: 0 2px 12px rgba(0,123,255,0.10);
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: 1px;
         }
         #show-modal:hover {
-            background: #0056b3;
+            background: linear-gradient(90deg, var(--accent), var(--primary-dark));
+            transform: translateY(-2px) scale(1.03);
         }
         #modal {
             display: none;
@@ -33,49 +45,68 @@
             z-index: 10;
             left: 0; top: 0;
             width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.25);
+            background: rgba(0,0,0,0.22);
+            backdrop-filter: blur(2px);
         }
         #modal-content {
-            background: #fff;
-            margin: 10% auto;
-            padding: 36px 28px 28px 28px;
-            width: 340px;
+            background: var(--modal-bg);
+            margin: 8% auto;
+            padding: 44px 32px 32px 32px;
+            width: 350px;
             text-align: center;
-            border-radius: 14px;
-            box-shadow: 0 6px 32px rgba(0,0,0,0.13);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
             position: relative;
-            animation: fadeIn 0.25s;
+            animation: fadeIn 0.28s;
         }
         .lock-icon {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 18px;
+            width: 70px;
+            height: 70px;
+            margin-bottom: 22px;
             display: inline-block;
+            filter: drop-shadow(0 2px 8px #ef233c33);
         }
         #modal-content p {
-            font-size: 1.25rem;
-            color: #ef233c;
-            font-weight: 600;
-            margin-bottom: 18px;
-            letter-spacing: 1px;
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 8px #fff, 0 4px 16px #ef233c22;
         }
         #close-btn {
-            padding: 10px 24px;
-            background: #007bff;
+            padding: 12px 32px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             color: #fff;
             border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 500;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.18s;
+            transition: background 0.18s, transform 0.12s;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.10);
         }
         #close-btn:hover {
-            background: #0056b3;
+            background: linear-gradient(90deg, var(--accent), var(--primary-dark));
+            transform: translateY(-2px) scale(1.03);
+        }
+        .desc {
+            color: #555;
+            font-size: 1.08rem;
+            margin-bottom: 18px;
+            margin-top: -8px;
+            letter-spacing: 0.5px;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-30px);}
             to { opacity: 1; transform: translateY(0);}
+        }
+        @media (max-width: 500px) {
+            #modal-content {
+                width: 95vw;
+                padding: 24px 6vw 24px 6vw;
+            }
         }
     </style>
 </head>
@@ -85,13 +116,24 @@
     <div id="modal">
         <div id="modal-content">
             <svg class="lock-icon" viewBox="0 0 64 64" fill="none">
-                <rect x="14" y="28" width="36" height="26" rx="6" fill="#ef233c"/>
-                <rect x="14" y="28" width="36" height="26" rx="6" stroke="#d90429" stroke-width="2"/>
-                <path d="M20 28V20C20 13.3726 25.3726 8 32 8C38.6274 8 44 13.3726 44 20V28" stroke="#d90429" stroke-width="3" fill="none"/>
-                <circle cx="32" cy="41" r="4" fill="#fff"/>
-                <rect x="30" y="41" width="4" height="8" rx="2" fill="#fff"/>
+                <ellipse cx="32" cy="53" rx="18" ry="6" fill="#ef233c22"/>
+                <rect x="16" y="28" width="32" height="26" rx="8" fill="#fff" stroke="#ef233c" stroke-width="2"/>
+                <path d="M20 28V20C20 13.3726 25.3726 8 32 8C38.6274 8 44 13.3726 44 20V28" 
+                      stroke="#ef233c" stroke-width="3" fill="none" filter="url(#shadow)"/>
+                <circle cx="32" cy="41" r="4.5" fill="#ef233c" stroke="#b71c2b" stroke-width="2"/>
+                <rect x="30.5" y="41" width="3" height="8" rx="1.5" fill="#b71c2b"/>
+                <ellipse cx="24" cy="36" rx="5" ry="2" fill="#fff" fill-opacity="0.25"/>
+                <defs>
+                    <filter id="shadow" x="0" y="0" width="64" height="64">
+                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#ef233c" flood-opacity="0.25"/>
+                    </filter>
+                </defs>
             </svg>
             <p>Access Denied</p>
+            <div class="desc">
+                You do not have permission to access this page.<br>
+                Please contact your administrator if you believe this is an error.
+            </div>
             <button id="close-btn">Close</button>
         </div>
     </div>
