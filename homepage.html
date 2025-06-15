@@ -63,6 +63,13 @@
             display: flex;
             gap: 1.2em;
             flex-wrap: wrap;
+            align-items: center; /* Ensure vertical alignment */
+        }
+        nav a,
+        .dropdown {
+            display: flex;
+            align-items: center;
+            height: 100%;
         }
         nav a {
             text-decoration: none;
@@ -78,6 +85,63 @@
         nav a:hover {
             color: var(--nav-hover-text);
             background: var(--accent-red);
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-btn {
+            text-decoration: none;
+            color: var(--primary-blue);
+            font-weight: 500;
+            font-size: 1.05em;
+            padding: 0.3em 0.9em;
+            border-radius: 0.7em;
+            letter-spacing: 1px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s, background 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+        .dropdown-btn:hover, .dropdown:hover .dropdown-btn {
+            color: var(--nav-hover-text);
+            background: var(--accent-red);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 110%;
+            background: #fff;
+            min-width: 180px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            border-radius: 8px;
+            z-index: 100;
+            padding: 0.5em 0;
+        }
+        .dropdown-content a {
+            display: block;
+            color: var(--primary-blue);
+            padding: 0.7em 1.2em;
+            text-decoration: none;
+            font-size: 1em;
+            border-radius: 0;
+            background: none;
+            transition: background 0.18s, color 0.18s;
+        }
+        .dropdown-content a:hover {
+            background: var(--accent-red);
+            color: #fff;
+        }
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content,
+        .dropdown-content:hover,
+        .dropdown-content:focus {
+            display: block;
         }
         .dashboard-content {
             max-width: 1200px;
@@ -186,12 +250,26 @@
 <body>
     <header>
         <div class="header-inner">
-            <span class="logo">Two-6</span>
+            <span class="logo">HexaMart</span>
             <nav>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-btn">Transactions</a>
+                    <div class="dropdown-content">
+                        <a href="#">Order Entry</a>
+                        <a href="#">Order Summary</a>
+                        <a href="#">Item Cancellation</a>
+                    </div>
+                </div>
                 <a href="#">Products</a>
                 <a href="#">Sales</a>
                 <a href="#">Inventory</a>
-                <a href="#">Members</a>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-btn">Members</a>
+                    <div class="dropdown-content">
+                        <a href="#">Membership</a>
+                        <a href="#">Loyalty Credits</a>
+                    </div>
+                </div>
                 <a href="#">Account</a>
             </nav>
         </div>
