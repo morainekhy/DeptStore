@@ -11,6 +11,10 @@
             height: 100vh;
             align-items: center;
             justify-content: center;
+            background-image: url('images/glassbg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
         }
         .login-container {
             background: #fff;
@@ -49,14 +53,15 @@
         }
         .login-container button:last-child {
             margin-right: 0;
-            background: #ef233c;
+            background: #ccc;   /* Match registration cancel button */
+            color: #333;        /* Match registration cancel button */
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form>
+        <form onsubmit="event.preventDefault(); window.location.href='homepage.html';">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
 
@@ -68,7 +73,7 @@
 
             <div style="display: flex; justify-content: space-between;">
                 <button type="submit">Login</button>
-                <button type="button" onclick="alert('Redirect to register page')">Register</button>
+                <button type="button" onclick="window.location.href='frontpage.html'">Cancel</button>
             </div>
         </form>
     </div>
