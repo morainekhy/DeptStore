@@ -153,9 +153,14 @@
                     Quantity
                     <input type="number" id="quantity" min="1" required>
                 </label>
-                <label for="unitPrice">Unit Price</label>
-                <input type="number" id="unitPrice" name="unitPrice" min="0" step="0.01" required>
-                <button type="button" onclick="addOrder()">Add to Orders</button>
+                <label>
+                    Unit Price
+                    <input type="number" id="unitPrice" name="unitPrice" min="0" step="0.01" required>
+                </label>
+                <div style="display: flex; gap: 16px; margin-top: 28px; justify-content: space-between;">
+                    <button type="button" onclick="addOrder()" style="width:48%;">Add to Orders</button>
+                    <button type="button" style="background:#333;width:48%;" onclick="confirmOrders()">Confirm</button>
+                </div>
             </form>
         </div>
 
@@ -205,6 +210,16 @@
             if (selected) {
                 tbody.removeChild(selected);
             }
+        }
+
+        function confirmOrders() {
+            const tbody = document.getElementById('ordersTable').querySelector('tbody');
+            if (tbody.children.length === 0) {
+                alert('No orders to confirm.');
+                return;
+            }
+            alert('Orders confirmed!');
+            tbody.innerHTML = '';
         }
     </script>
 </body>
